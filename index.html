@@ -8,8 +8,8 @@
     #globeViz { width: 100vw; height: 100vh; }
     .flag-label {
       display: inline-block;
-      width: 32px;
-      height: 24px;
+      width: 64px;
+      height: 48px;
       background-size: cover;
       border: 1px solid #333;
     }
@@ -35,14 +35,14 @@
     ];
 
     const globe = new Globe(document.getElementById('globeViz'))
-      .globeTileEngineUrl((x, y, l) => `https://tile.openstreetmap.org/${l}/${x}/${y}.png`)
+      .globeTileEngineUrl((x, y, l) => `https://cartodb-basemaps-a.global.ssl.fastly.net/light_all/${l}/${x}/${y}.png`)
       .pointsData(countries)
       .pointLat(d => d.lat)
       .pointLng(d => d.lng)
-      .pointAltitude(0.01) // lift a little above globe
-      .pointRadius(0.5)
-      .pointColor(() => 'white')
-      .pointLabel(d => `<div class="flag-label" style="background-image: url('https://flagcdn.com/w40/${d.code.toLowerCase()}.png')"></div> ${d.name}`);
+      .pointAltitude(0.001)
+      .pointRadius(0.3)
+      .pointColor(() => 'red')
+      .pointLabel(d => `<div class="flag-label" style="background-image: url('https://flagcdn.com/h80/${d.code.toLowerCase()}.png')"></div> ${d.name}`);
 
   </script>
 </body>

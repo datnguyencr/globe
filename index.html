@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Globe with Flag Sprites</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    #globeViz { width: 100vw; height: 100vh; }
+    .flag-label {
+      display: inline-block;
+      width: 32px;
+      height: 24px;
+      background-size: cover;
+      border: 1px solid #333;
+    }
+  </style>
+</head>
+<body>
+  <div id="globeViz"></div>
+
+  <!-- Globe.gl and TopoJSON -->
+  <script src="https:////cdn.jsdelivr.net/npm/globe.gl"></script>
+  <script src="https://unpkg.com/topojson-client@3"></script>
+
+  <script type="module">
+    // Minimal country dataset with lat/lng centroids and alpha-2 codes
+    const countries = [
+      { name: 'Fiji', lat: -17.7134, lng: 178.065, code: 'FJ' },
+      { name: 'Tanzania', lat: -6.3690, lng: 34.8888, code: 'TZ' },
+      { name: 'Canada', lat: 61.0667, lng: -107.9917, code: 'CA' },
+      { name: 'USA', lat: 39.8283, lng: -98.5795, code: 'US' },
+      { name: 'Kazakhstan', lat: 48.0196, lng: 66.9237, code: 'KZ' },
+      { name: 'Uzbekistan', lat: 41.3775, lng: 64.5853, code: 'UZ' }
+      // Add more countries if needed
+    ];
+
+    const globe = new Globe(document.getElementById('globeViz'))
+      .globeTileEngineUrl((x, y, l) => `https://tile.openstreetmap.org/${l}/${x}/${y}.png`)
+      .pointsData(countries)
+      .pointLat(d => d.lat)
+      .pointLng(d => d.lng)
+      .pointAltitude(0.01) // lift a little above globe
+      .pointRadius(0.5)
+      .pointColor(() => 'white')
+      .pointLabel(d => `<div class="flag-label" style="background-image: url('https://flagcdn.com/w40/${d.code.toLowerCase()}.png')"></div> ${d.name}`);
+
+  </script>
+</body>
+</html>

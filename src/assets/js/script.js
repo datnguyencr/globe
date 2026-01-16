@@ -7,12 +7,14 @@ fetch("geo/countries.json")
     });
 
 let autoRotate = true;
+var defaultGlobe = "images/earth_daymap.webp";
 const world = Globe()(document.getElementById("globeViz"))
-    .globeImageUrl("images/earth_daymap.webp")
+    .globeImageUrl(defaultGlobe)
     .bumpImageUrl("images/earth_topology.webp")
     .backgroundImageUrl("images/night_sky.webp")
     .pointsData(countries)
     .pointLat((d) => d.lat)
+    .atmosphereColor(planetShadowColorFromUrl(defaultGlobe)) // blue glow
     .pointLng((d) => d.lng)
     .pointAltitude(0.01)
     .pointRadius(0.5)
@@ -26,10 +28,49 @@ const world = Globe()(document.getElementById("globeViz"))
     .onPointClick((d) => {
         focusOnCountry(d.lat, d.lng);
     });
-
 // Auto-rotation controls
 world.controls().autoRotate = true;
 world.controls().autoRotateSpeed = 0.5;
+function getPlanetCodeFromUrl(url) {
+    return url
+        .split("/") // remove path
+        .pop() // earth_daymap.webp
+        .replace(".webp", "") // earth_daymap
+        .replace("earth_daymap", "earth")
+        .replace("earth_night", "earth")
+        .replace("earth_dark", "earth_dark")
+        .replace("earth_topology", "earth_topology");
+}
+
+function planetShadowColorFromUrl(imageUrl) {
+    const code = getPlanetCodeFromUrl(imageUrl);
+
+    switch (code) {
+        case "moon":
+        case "earth_clouds":
+        case "mercury":
+            return "rgba(255, 255, 255, 0.5)"; // white
+
+        case "earth_dark":
+        case "earth_topology":
+        case "jupiter":
+            return "rgba(128, 128, 128, 0.5)"; // grey
+
+        case "sun":
+        case "mars":
+            return "red";
+
+        case "venus_surface":
+            return "orange";
+
+        case "venus_atmosphere":
+        case "saturn":
+            return "rgba(255, 255, 0, 0.5)"; // yellow
+
+        default:
+            return "blue";
+    }
+}
 
 // Fetch GeoJSON for polygons
 fetch("geo/ne_110m_admin_0_countries.geojson")
@@ -126,7 +167,8 @@ document.getElementById("globe-theme").addEventListener("change", (e) => {
     const url = e.target.value;
     const text = e.target.options[e.target.selectedIndex].text.toLowerCase();
     world.globeImageUrl(url);
-
+    const glowColor = planetShadowColorFromUrl(url);
+    world.atmosphereColor(glowColor);
     let newPlanet = "earth"; // default
     if (text.includes("moon")) newPlanet = "moon";
     else if (text.includes("mars")) newPlanet = "mars";

@@ -70,3 +70,114 @@
         background: #333;
         color: #fff;
     }
+
+    /* Buttons */
+    button {
+        background: rgba(0, 200, 255, 0.2);
+        border: 1px solid rgba(0, 200, 255, 0.4);
+        border-radius: 4px;
+        color: white;
+        padding: 5px 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: inherit;
+    }
+
+    button:hover {
+        background: rgba(0, 200, 255, 0.4);
+    }
+
+    /* Zoom Controls */
+    #zoom-controls {
+        position: absolute;
+        bottom: 30px;
+        right: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #zoom-controls button {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+    }
+
+    #zoom-controls button:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Modal */
+    #planet-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        backdrop-filter: blur(5px);
+    }
+
+    #planet-modal.hidden {
+        display: none;
+    }
+
+    .modal-content {
+        background: rgba(20, 20, 30, 0.9);
+        padding: 30px;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 500px;
+        max-height: 80vh;
+        overflow-y: auto;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    #close-modal {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 28px;
+        cursor: pointer;
+        color: #aaa;
+    }
+
+    #close-modal:hover {
+        color: #fff;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 15px;
+    }
+    
+    .info-item {
+        background: rgba(255,255,255,0.05);
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .info-key {
+        font-weight: bold;
+        color: #00c8ff;
+        display: block;
+        margin-bottom: 4px;
+        font-size: 0.9em;
+        text-transform: uppercase;
+    }

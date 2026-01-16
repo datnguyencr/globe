@@ -10,15 +10,55 @@
         <div id="info-card">
             <h2>Interactive Globe</h2>
             <div class="control-group">
-                <label for="globe-theme">Theme:</label>
+                <label for="globe-theme">Planet:</label>
                 <select id="globe-theme">
-                    <option value="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg">Blue Marble</option>
-                    <option value="//unpkg.com/three-globe/example/img/earth-night.jpg">Night</option>
-                    <option value="//unpkg.com/three-globe/example/img/earth-dark.jpg">Dark</option>
+                    <option value="/globe/images/earth_daymap.webp">
+                        Earth Day
+                    </option>
+                    <option value="/globe/images/earth_night.webp">
+                        Earth Night
+                    </option>
+                    <option value="/globe/images/earth_dark.webp">
+                        Earth Dark
+                    </option>
+
+                    <option value="/globe/images/earth_topology.webp">
+                        Earth Topology
+                    </option>
+                    <option value="/globe/images/moon.webp">Moon</option>
+                    <option value="/globe/images/jupiter.webp">Jupiter</option>
+                    <option value="/globe/images/mars.webp">Mars</option>
+                    <option value="/globe/images/mercury.webp">Mercury</option>
+                    <option value="/globe/images/neptune.webp">Neptune</option>
+                    <option value="/globe/images/saturn.webp">Saturn</option>
+                    <option value="/globe/images/sun.webp">Sun</option>
+                    <option value="/globe/images/uranus.webp">Uranus</option>
+                    <option value="/globe/images/venus_atmosphere.webp">
+                        Venus Atmosphere
+                    </option>
+                    <option value="/globe/images/venus_surface.webp">
+                        Venus Surface
+                    </option>
                 </select>
             </div>
             <p>Hover over a country to see its name.</p>
             <p>Click to view statistics.</p>
+            <button id="show-info-btn">Show Planet Info</button>
+        </div>
+
+        <div id="zoom-controls">
+            <button id="zoom-in" title="Zoom In">+</button>
+            <button id="zoom-out" title="Zoom Out">-</button>
+        </div>
+
+        <div id="planet-modal" class="hidden">
+            <div class="modal-content">
+                <span id="close-modal">&times;</span>
+                <h2 id="modal-title">Planet Info</h2>
+                <div id="modal-body">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/globe.gl"></script>
         <script src="https://unpkg.com/topojson-client@3"></script>

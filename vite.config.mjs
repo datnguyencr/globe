@@ -4,7 +4,7 @@ import { viteStaticCopy } from "vite-plugin-static-copy";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-    base: "/globe/",
+    base: "/planet-explorer-web/",
     root: "src",
     plugins: [
         tailwindcss(),

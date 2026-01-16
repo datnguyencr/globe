@@ -197,12 +197,98 @@ const countries = [
 ];
 
 
-    const globe = new Globe(document.getElementById('globeViz'))
-      .globeTileEngineUrl((x, y, l) => `https://cartodb-basemaps-a.global.ssl.fastly.net/light_all/${l}/${x}/${y}.png`)
+    // State for the interactive globe
+    let autoRotate = true;
+    const world = Globe()(document.getElementById('globeViz'))
+      .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+      .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
+      .backgroundImageUrl('https://unpkg.com/three-globe/example/img/night-sky.png')
       .pointsData(countries)
       .pointLat(d => d.lat)
       .pointLng(d => d.lng)
-      .pointAltitude(0.001)
-      .pointRadius(0.1)
-      .pointColor(() => 'red')
-      .pointLabel(d => `<div class="flag-label" style="background-image: url('https://flagcdn.com/h80/${d.code.toLowerCase()}.png')"></div> ${d.name}`);
+      .pointAltitude(0.01) // Slightly raised
+      .pointRadius(0.5) // Slightly larger
+      .pointColor(() => 'rgba(255, 0, 0, 0.7)') // Semi-transparent red
+      .pointLabel(d => `<div class="flag-label" style="background-image: url('https://flagcdn.com/h80/${d.code.toLowerCase()}.png'); width: 40px; height: 30px; background-size: cover; border-radius: 4px;"></div> ${d.name}`)
+      .onPointClick(d => {
+         // also handle point click same as polygon if possible, or just focus
+         focusOnCountry(d.lat, d.lng);
+      });
+
+    // Auto-rotation controls
+    world.controls().autoRotate = true;
+    world.controls().autoRotateSpeed = 0.5;
+
+    // Fetch GeoJSON for polygons
+    fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson')
+      .then(res => res.json())
+      .then(countriesGeoJson => {
+        world.polygonsData(countriesGeoJson.features)
+          .polygonAltitude(0.005)
+          .polygonCapColor(d => d === world.highlightedCountry ? 'rgba(0, 200, 255, 0.3)' : 'rgba(0,0,0,0)')
+          .polygonSideColor(() => 'rgba(0,0,0,0)')
+          .polygonStrokeColor(() => '#111')
+          .polygonLabel(({ properties: d }) => `
+            <div style="background: rgba(0,0,0,0.8); padding: 8px; border-radius: 4px; color: white;">
+                <b>${d.NAME}</b> <br />
+                Population: ${d.POP_EST ? d.POP_EST.toLocaleString() : 'N/A'}
+            </div>
+          `)
+          .onPolygonHover(hoverD => {
+            world.controls().autoRotate = !hoverD && autoRotate; // Pause on hover
+            world.polygonCapColor(d => d === hoverD ? 'rgba(0, 200, 255, 0.3)' : 'rgba(0,0,0,0)')
+          })
+          .onPolygonClick(d => {
+            autoRotate = false;
+            world.controls().autoRotate = false;
+            world.highlightedCountry = d;
+            
+            // Focus on the clicked country
+            // Calculate centroid or use d.bbox if available, or just map point
+            // For now, we can approximate or just stop rotation. 
+            // Better: find the matching point in our `countries` list to focus if possible, 
+            // or compute centroid from polygon geometry (complex).
+            // Simplification: Just stop and highlight.
+            
+            updateStats(d.properties);
+          });
+      });
+
+    function updateStats(properties) {
+        const infoCard = document.getElementById('info-card');
+        const { NAME, ISO_A2, POP_EST } = properties;
+        
+        infoCard.innerHTML = `
+            <h2>${NAME}</h2>
+            <p><span class="stat-label">Population:</span> <span class="stat-value">${POP_EST ? POP_EST.toLocaleString() : 'Loading...'}</span></p>
+            <p><span class="stat-label">Code:</span> <span class="stat-value">${ISO_A2}</span></p>
+            <p id="area-stat"><span class="stat-label">Area:</span> <span class="stat-value">Loading...</span></p>
+        `;
+
+        // Fetch extra data (Area)
+        if (ISO_A2) {
+             fetch(`https://restcountries.com/v3.1/alpha/${ISO_A2}`)
+                .then(res => res.json())
+                .then(data => {
+                    const countryData = data[0];
+                    if (countryData && countryData.area) {
+                        const areaStr = countryData.area.toLocaleString() + ' km²';
+                         document.getElementById('area-stat').innerHTML = 
+                            `<span class="stat-label">Area:</span> <span class="stat-value">${areaStr}</span>`;
+                    }
+                })
+                .catch(err => {
+                    console.error("Error fetching country details:", err);
+                    document.getElementById('area-stat').innerHTML = 
+                            `<span class="stat-label">Area:</span> <span class="stat-value">N/A</span>`;
+                });
+        } else {
+             document.getElementById('area-stat').innerHTML = 
+                            `<span class="stat-label">Area:</span> <span class="stat-value">N/A</span>`;
+        }
+    }
+    
+    // Initial call to set size
+    // window.addEventListener('resize', () => {
+    //   world.width(window.innerWidth).height(window.innerHeight);
+    // });

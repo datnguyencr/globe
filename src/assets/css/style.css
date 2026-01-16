@@ -7,3 +7,43 @@
       background-size: cover;
       border: 1px solid #333;
     }
+
+    #info-card {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 300px;
+        padding: 20px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        pointer-events: none; /* Let clicks pass through if not interacting with the card itself */
+        transition: opacity 0.3s ease;
+    }
+
+    #info-card h2 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    #info-card p {
+        margin: 5px 0;
+        font-size: 1rem;
+        opacity: 0.9;
+    }
+
+    #info-card .stat-label {
+        font-weight: bold;
+        color: #ddd;
+    }
+
+    #info-card .stat-value {
+        color: #fff;
+    }

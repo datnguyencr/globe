@@ -47,3 +47,26 @@
     #info-card .stat-value {
         color: #fff;
     }
+
+    .control-group {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #globe-theme {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 4px;
+        outline: none;
+        cursor: pointer;
+        pointer-events: auto; /* Re-enable pointer events for the select */
+    }
+
+    #globe-theme option {
+        background: #333;
+        color: #fff;
+    }

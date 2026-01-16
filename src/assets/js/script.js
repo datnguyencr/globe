@@ -287,6 +287,11 @@ const countries = [
                             `<span class="stat-label">Area:</span> <span class="stat-value">N/A</span>`;
         }
     }
+
+    // Theme Switcher
+    document.getElementById('globe-theme').addEventListener('change', (e) => {
+        world.globeImageUrl(e.target.value);
+    });
     
     // Initial call to set size
     // window.addEventListener('resize', () => {

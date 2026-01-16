@@ -4,4 +4,4 @@ A lightweight, browser-based 3D globe built with **globe.gl**, displaying countr
 
 ## 🚀 Live Demo
 
-https://datnguyencr.github.io/globe/
+https://datnguyencr.github.io/planet-explorer-web/
